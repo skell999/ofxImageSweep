@@ -11,7 +11,11 @@ ofxImageSweep::~ofxImageSweep()
 void ofxImageSweep::allocate(int width, int height)
 {
 	fbo.allocate(width, height);
-	shader.load("../../../../../addons/ofxImageSweep/src/shader/ImageSweep");
+
+	copyShaderToBin();
+
+	shader.load("ofxImageSweepShader/ImageSweep");
+
 }
 
 void ofxImageSweep::update(const ofTexture& texture, float width, float pos)
@@ -42,4 +46,37 @@ void ofxImageSweep::draw(int x, int y)
 ofFbo& ofxImageSweep::getFbo()
 {
 	return fbo;
+}
+
+ofShader& ofxImageSweep::getShader()
+{
+	return shader;
+}
+
+bool ofxImageSweep::copyShaderToBin()
+{
+	ofDirectory dir;
+
+	bool result = true;
+	if (!dir.doesDirectoryExist("ofxImageSweepShader")) {
+		if (!dir.createDirectory("ofxImageSweepShader"))
+		{
+			cout << "Create Directory ofxImageSweepShader FAILED" << endl;
+			result = false;
+		}
+	}
+
+	if (!ofFile::copyFromTo("../../../../../addons/ofxImageSweep/src/shader/ImageSweep.vert", "ofxImageSweepShader/ImageSweep.vert") && !result)
+	{
+		cout << "Copy ImageSweep.vert FAILED" << endl;
+		result = false;
+	}
+
+	if (!ofFile::copyFromTo("../../../../../addons/ofxImageSweep/src/shader/ImageSweep.frag", "ofxImageSweepShader/ImageSweep.frag") && !result)
+	{
+		cout << "Copy ImageSweep.frag FAILED" << endl;
+		result = false;
+	};
+
+	return result;
 }
