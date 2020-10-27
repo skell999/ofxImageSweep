@@ -24,6 +24,7 @@ Image sweep takes an image as input and slices it into a small strip with repeat
 Create an instance of ofImage and ofxImageSweep
 ```cpp
 ofImage image;
+ofImage positionMap;
 ofxImageSweep sweep;
 ```
 
@@ -31,6 +32,7 @@ Load an image and initialize ofxImageSweep
 ```cpp
 void ofApp::setup(){
   image.load("yourPic.jpg");
+  positionMap.load("map.jpg"); // A black and white image that controls the position in the x direction
   sweep.allocate(ofGetWidth(),ofGetHeight());
 }
 ```
@@ -38,9 +40,15 @@ void ofApp::setup(){
 In your update function
 ```cpp
 void ofApp::update(){
-  float width = 64; // Slice width
-  float pos = 400; // Slice position
-  sweep.update(image.getTexture(), width, pos);
+  float divX = 6; // Amount of x slices
+  float divY = 6; // Amount of y slices
+  float posX = 100; // Scan position x
+  float posY = 100; // Scan position y
+  bool flipX = true; // Enable x symmetry
+  bool flipY = true; // Enable y symmetry
+  bool sliceX = true; // Enable x slice
+  bool sliceY = true; // Enable y slice
+  sweep.update(image.getTexture(), positionMap.getTexture(), divX, divY, posX, posY, flipX, flipY, sliceX, sliceY);
 }
 ```
 
@@ -55,8 +63,20 @@ void ofApp::draw(){
 
 ```cpp
 void ofApp::update(){
-  float width = 64;
   float speed = 6;
-  sweep.update(image.getTexture(), width, ofGetElapsedTimef() * speed);
-}
+  float position = ofGetElapsedTimef() * speed;
+
+  float divX = 6; // Amount of x slices
+  float divY = 6; // Amount of y slices
+
+  float posX = position; // Scan position x
+  float posY = position; // Scan position y
+
+  bool flipX = true; // Enable x symmetry
+  bool flipY = true; // Enable y symmetry
+
+  bool sliceX = true; // Enable x slice
+  bool sliceY = true; // Enable y slice
+
+  sweep.update(image.getTexture(), positionMap.getTexture(), divX, divY, posX, posY, flipX, flipY, sliceX, sliceY);
 ```
