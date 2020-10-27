@@ -21,7 +21,7 @@ Image sweep takes an image as input and slices it into a small strip with repeat
 
 ## Basic usage
 
-Create an instance of ofImage and ofxImageSweep
+Create ofImage and ofxImageSweep
 ```cpp
 ofImage image;
 ofImage positionMap;
